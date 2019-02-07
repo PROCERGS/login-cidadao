@@ -15,6 +15,7 @@ use LoginCidadao\CoreBundle\Entity\Person;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Entity\SentEmail;
 use LoginCidadao\CoreBundle\Entity\SentEmailRepository;
+use LoginCidadao\CoreBundle\Model\IdentifiablePersonInterface;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use LoginCidadao\SupportBundle\Exception\PersonNotFoundException;
@@ -191,6 +192,68 @@ class SupportHandlerTest extends TestCase
 
         $this->assertEquals(0, $metadata['samePhoneCount']);
         $this->assertNull($metadata['verification']);
+    }
+
+    public function testThirdPartyConnections()
+    {
+        /** @var IdentifiablePersonInterface|MockObject $identifiablePerson */
+        $identifiablePerson = $this->createMock(IdentifiablePersonInterface::class);
+        $identifiablePerson->expects($this->once())->method('getId')->willReturn($id = 666);
+
+        $person = $this->createMock(Person::class);
+        $person->expects($this->once())->method('getFacebookId')->willReturn('facebook');
+        $person->expects($this->once())->method('getGoogleId')->willReturn('google');
+        $person->expects($this->once())->method('getTwitterId')->willReturn('twitter');
+
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $this->getPhoneVerificationService(),
+            $this->getPersonRepo($id, $person),
+            $this->getSentEmailRepo()
+        );
+        $this->assertEquals([
+            'google' => true,
+            'facebook' => true,
+            'twitter' => true,
+        ], $handler->getThirdPartyConnections($identifiablePerson));
+    }
+
+    public function testThirdPartyConnectionsWithPersonInterface()
+    {
+        $person = $this->createMock(Person::class);
+        $person->expects($this->once())->method('getFacebookId')->willReturn('facebook');
+        $person->expects($this->once())->method('getGoogleId')->willReturn('google');
+        $person->expects($this->once())->method('getTwitterId')->willReturn('twitter');
+
+        $personRepo = $this->getPersonRepo();
+        $personRepo->expects($this->never())->method('find');
+
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $this->getPhoneVerificationService(),
+            $personRepo,
+            $this->getSentEmailRepo()
+        );
+        $this->assertEquals([
+            'google' => true,
+            'facebook' => true,
+            'twitter' => true,
+        ], $handler->getThirdPartyConnections($person));
+    }
+
+    public function testThirdPartyConnectionsUserNotFound()
+    {
+        /** @var IdentifiablePersonInterface|MockObject $identifiablePerson */
+        $identifiablePerson = $this->createMock(IdentifiablePersonInterface::class);
+        $identifiablePerson->expects($this->once())->method('getId')->willReturn($id = 666);
+
+        $handler = new SupportHandler(
+            $this->getAuthChecker(),
+            $this->getPhoneVerificationService(),
+            $this->getPersonRepo($id, null),
+            $this->getSentEmailRepo()
+        );
+        $this->assertEmpty($handler->getThirdPartyConnections($identifiablePerson));
     }
 
     private function getPersonalData(?string $name, ?string $hash, ?string $challenge, $value, bool $filled)

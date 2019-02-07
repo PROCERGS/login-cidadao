@@ -49,9 +49,6 @@ class SupportPerson implements IdentifiablePersonInterface
     /** @var bool */
     private $has2FA;
 
-    /** @var array */
-    private $thirdPartyConnections = [];
-
     /** @var bool */
     private $isEnabled;
 
@@ -81,12 +78,6 @@ class SupportPerson implements IdentifiablePersonInterface
         $this->lastUpdate = $person->getUpdatedAt();
         $this->createdAt = $person->getCreatedAt();
         $this->lastLogin = $person->getLastLogin();
-
-        $this->thirdPartyConnections = [
-            'facebook' => $person->getFacebookId() !== null,
-            'google' => $person->getGoogleId() !== null,
-            'twitter' => $person->getTwitterId() !== null,
-        ];
 
         if ($authorizationChecker->isGranted('ROLE_VIEW_USERS_CPF')) {
             $this->cpf = PersonalData::createWithValue('cpf', $person->getCpf());
@@ -210,14 +201,6 @@ class SupportPerson implements IdentifiablePersonInterface
     public function has2FA(): bool
     {
         return $this->has2FA;
-    }
-
-    /**
-     * @return array
-     */
-    public function getThirdPartyConnections(): array
-    {
-        return $this->thirdPartyConnections;
     }
 
     /**

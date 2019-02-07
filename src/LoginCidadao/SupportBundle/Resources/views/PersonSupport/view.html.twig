@@ -41,7 +41,7 @@
                         </dl>
 
                         <dl>
-                            {% for thirdParty, connected in person.thirdPartyConnections %}
+                            {% for thirdParty, connected in thirdPartyConnections %}
                                 <dt>{{ ('support.person.view.connections.' ~ thirdParty ~ '.label') | trans }}</dt>
                                 <dd>{{ (connected ? 'support.person.view.connections.enabled' : 'support.person.view.connections.disabled') | trans }}</dd>
                             {% endfor %}

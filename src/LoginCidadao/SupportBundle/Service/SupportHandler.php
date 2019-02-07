@@ -65,6 +65,25 @@ class SupportHandler
         return new SupportPerson($person, $this->authChecker);
     }
 
+    public function getThirdPartyConnections(IdentifiablePersonInterface $person): array
+    {
+        $connections = [];
+        if (!$person instanceof PersonInterface) {
+            /** @var PersonInterface $person */
+            $person = $this->personRepository->find($person->getId());
+        }
+
+        if ($person instanceof PersonInterface) {
+            $connections = [
+                'facebook' => $person->getFacebookId() !== null,
+                'google' => $person->getGoogleId() !== null,
+                'twitter' => $person->getTwitterId() !== null,
+            ];
+        }
+
+        return $connections;
+    }
+
     public function getPhoneMetadata(IdentifiablePersonInterface $person): array
     {
         /** @var PersonInterface $person */
