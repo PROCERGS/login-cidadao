@@ -61,6 +61,9 @@ class SupportPerson implements IdentifiablePersonInterface
     /** @var \DateTimeInterface */
     private $createdAt;
 
+    /** @var \DateTimeInterface */
+    private $lastLogin;
+
     /**
      * SupportPerson constructor.
      * @param PersonInterface $person
@@ -77,6 +80,7 @@ class SupportPerson implements IdentifiablePersonInterface
         $this->isEnabled = $person->isEnabled();
         $this->lastUpdate = $person->getUpdatedAt();
         $this->createdAt = $person->getCreatedAt();
+        $this->lastLogin = $person->getLastLogin();
 
         $this->thirdPartyConnections = [
             'facebook' => $person->getFacebookId() !== null,
@@ -238,5 +242,13 @@ class SupportPerson implements IdentifiablePersonInterface
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getLastLogin(): \DateTimeInterface
+    {
+        return $this->lastLogin;
     }
 }

@@ -24,6 +24,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class PersonSupportController
@@ -79,12 +80,20 @@ class PersonSupportController extends Controller
      */
     public function viewAction(Request $request, $id)
     {
-        $supportRequest = $this->validateSupportTicketId($request->get('ticket'));
+        try {
+            $supportRequest = $this->validateSupportTicketId($request->get('ticket'));
+        } catch (NotFoundHttpException $e) {
+            if (!$this->isGranted('ROLE_SKIP_SUPPORT_TOKEN_VALIDATION')) {
+                throw $e;
+            }
+            $supportRequest = $this->getDummySupportMessage();
+        }
 
         /** @var SupportHandler $supportHandler */
         $supportHandler = $this->get(SupportHandler::class);
 
         $person = $supportHandler->getSupportPerson($id);
+        $phoneMetadata = $supportHandler->getPhoneMetadata($person);
 
         /** @var ActionLogger $actionLogger */
         $actionLogger = $this->get('lc.action_logger');
@@ -94,6 +103,7 @@ class PersonSupportController extends Controller
             'person' => $person,
             'supportRequest' => $supportRequest,
             'dataValidation' => $supportHandler->getValidationMap($person),
+            'phoneMetadata' => $phoneMetadata,
         ]);
     }
 
@@ -121,5 +131,15 @@ class PersonSupportController extends Controller
         $grid->setQueryBuilder($query);
 
         return $grid;
+    }
+
+    private function getDummySupportMessage()
+    {
+        return (new SentEmail())
+            ->setType('dummy')
+            ->setDate(new \DateTime())
+            ->setSubject('Dummy message')
+            ->setMessage('Dummy message')
+            ->setSender('Dummy');
     }
 }
