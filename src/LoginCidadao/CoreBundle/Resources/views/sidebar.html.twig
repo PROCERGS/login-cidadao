@@ -81,6 +81,14 @@
                     </a>
                 </li>
             {% endif %}
+            {% if app.user is not null and is_granted('ROLE_SUPPORT_SEARCH_USERS') %}
+                <li class="services glyph">
+                    <a href="{{ path('lc_support_person_search') }}" class="clearfix">
+                        <span>{{ 'support.search.menu.support' | trans }}</span>
+                        <i class="glyphicon glyphicon-question-sign icon"></i>
+                    </a>
+                </li>
+            {% endif %}
         {% endblock %}
     </ul>
 </div>

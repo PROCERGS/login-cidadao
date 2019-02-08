@@ -6,6 +6,7 @@ imports:
     - { resource: logstash.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
     - { resource: 'workflows/*.{yml,yaml}' }
+    - { resource: "@LoginCidadaoSupportBundle/Resources/config/services.yml" }
 
 framework:
     #esi:             ~
@@ -296,6 +297,7 @@ simple_things_entity_audit:
 
         - LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification
         - LoginCidadao\PhoneVerificationBundle\Entity\SentVerification
+        - LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumber
 
         - PROCERGS\LoginCidadao\CoreBunde\Entity\PersonMeuRS
         - PROCERGS\LoginCidadao\NfgBunde\Entity\NfgProfile
@@ -604,6 +606,14 @@ liip_monitor:
 services:
     fos_user.doctrine_registry:
         alias: doctrine
+
+    # Extend Third Party Connections in the Support Page
+    PROCERGS\LoginCidadao\CoreBundle\Service\SupportHandlerDecorator:
+        decorates: 'LoginCidadao\SupportBundle\Service\SupportHandler'
+        arguments:
+            - '@PROCERGS\LoginCidadao\CoreBundle\Service\SupportHandlerDecorator.inner'
+            - '@meurs.helper'
+            - '@lc.person.repository'
 
 donato_path_well:
     enabled: '%check_pathwell_topologies%'

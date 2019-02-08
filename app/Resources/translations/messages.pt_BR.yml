@@ -1,4 +1,6 @@
 password_hint:
     range:
-        with_reqs: Senha de %min% ou mais %reqs%.
-        no_reqs: Senha de %min% ou mais caracteres.
+        with_reqs: "Senha de %min% ou mais %reqs%."
+        no_reqs: "Senha de %min% ou mais caracteres."
+
+support.person.view.connections.nfg.label: "Nota Fiscal Gaúcha"

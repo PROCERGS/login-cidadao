@@ -24,6 +24,7 @@ class PhoneVerificationOptionsTest extends TestCase
         $caseSensitive = true;
         $smsResendTimeout = '+10 minutes';
         $tokenLength = 5;
+        $enforceVerificationThreshold = 2;
 
         $options = new PhoneVerificationOptions(
             $length,
@@ -32,7 +33,8 @@ class PhoneVerificationOptionsTest extends TestCase
             $useLower,
             $useUpper,
             $smsResendTimeout,
-            $tokenLength
+            $tokenLength,
+            $enforceVerificationThreshold
         );
 
         $this->assertEquals($length, $options->getLength());
@@ -42,5 +44,6 @@ class PhoneVerificationOptionsTest extends TestCase
         $this->assertTrue($options->isCaseSensitive());
         $this->assertEquals($smsResendTimeout, $options->getSmsResendTimeout());
         $this->assertEquals($tokenLength, $options->getVerificationTokenLength());
+        $this->assertEquals($enforceVerificationThreshold, $options->getEnforceVerificationThreshold());
     }
 }
