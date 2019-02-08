@@ -22,7 +22,7 @@ use LoginCidadao\SupportBundle\Model\PersonalData;
 use LoginCidadao\SupportBundle\Model\SupportPerson;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class SupportHandler
+class SupportHandler implements SupportHandlerInterface
 {
     /** @var AuthorizationCheckerInterface */
     private $authChecker;
