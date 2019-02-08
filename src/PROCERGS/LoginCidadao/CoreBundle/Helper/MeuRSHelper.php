@@ -10,7 +10,7 @@
 
 namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
@@ -19,38 +19,32 @@ use PROCERGS\LoginCidadao\CoreBundle\Entity\PersonMeuRSRepository;
 
 class MeuRSHelper
 {
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     protected $em;
 
     /** @var PersonMeuRSRepository */
     protected $personMeuRSRepository;
 
-    public function __construct(
-        EntityManager $em,
-        EntityRepository $personMeuRSRepository
-    ) {
+    public function __construct(EntityManagerInterface $em, EntityRepository $personMeuRSRepository)
+    {
         $this->em = $em;
         $this->personMeuRSRepository = $personMeuRSRepository;
     }
 
     /**
-     * @param \LoginCidadao\CoreBundle\Model\PersonInterface $person
+     * @param PersonInterface $person
      * @param boolean $create
      * @return PersonMeuRS
      */
     public function getPersonMeuRS(PersonInterface $person, $create = false)
     {
-        $personMeuRS = $this->personMeuRSRepository->findOneBy(
-            array(
-                'person' => $person,
-            )
-        );
+        $personMeuRS = $this->personMeuRSRepository->findOneBy(['person' => $person]);
 
         if ($create && !($personMeuRS instanceof PersonMeuRS)) {
             $personMeuRS = new PersonMeuRS();
             $personMeuRS->setPerson($person);
             $this->em->persist($personMeuRS);
-            $this->em->flush($personMeuRS);
+            $this->em->flush();
         }
 
         return $personMeuRS;
@@ -63,11 +57,8 @@ class MeuRSHelper
         return $personMeuRS ? $personMeuRS->getVoterRegistration() : null;
     }
 
-    public function setVoterRegistration(
-        EntityManager $em,
-        PersonInterface $person,
-        $value
-    ) {
+    public function setVoterRegistration(EntityManagerInterface $em, PersonInterface $person, $value)
+    {
         $personMeuRS = $this->getPersonMeuRS($person, true);
 
         $personMeuRS->setVoterRegistration($value);

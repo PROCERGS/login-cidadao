@@ -607,6 +607,14 @@ services:
     fos_user.doctrine_registry:
         alias: doctrine
 
+    # Extend Third Party Connections in the Support Page
+    PROCERGS\LoginCidadao\CoreBundle\Service\SupportHandlerDecorator:
+        decorates: 'LoginCidadao\SupportBundle\Service\SupportHandler'
+        arguments:
+            - '@PROCERGS\LoginCidadao\CoreBundle\Service\SupportHandlerDecorator.inner'
+            - '@meurs.helper'
+            - '@lc.person.repository'
+
 donato_path_well:
     enabled: '%check_pathwell_topologies%'
 
