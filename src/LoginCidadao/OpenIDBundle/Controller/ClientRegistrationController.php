@@ -15,15 +15,17 @@ use FOS\RestBundle\Context\Context;
 use LoginCidadao\OAuthBundle\Entity\Client;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Manager\ClientManager;
-use LoginCidadao\OpenIDBundle\Model\CreateClientRequest;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
-use LoginCidadao\OpenIDBundle\Form\ClientMetadataForm;
 use LoginCidadao\OpenIDBundle\Exception\DynamicRegistrationException;
-use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class ClientRegistrationController
@@ -39,28 +41,17 @@ class ClientRegistrationController extends FOSRestController
      */
     public function registerAction(Request $request)
     {
-        $createClientRequest = new CreateClientRequest();
+        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
 
-        $form = $this->createForm(ClientMetadataForm::class, $createClientRequest);
-        $form->handleRequest($request);
+        /** @var ClientMetadata $metadata */
+        $metadata = $serializer->deserialize($request->getContent(), ClientMetadata::class, 'json');
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        /** @var ValidatorInterface $validator */
+        $validator = $this->get('validator');
+        $violations = $validator->validate($metadata);
+
+        if ($violations->count() === 0) {
             $clientManager = $this->getClientManager();
-            $metadata = $clientManager->createClientMetadata($createClientRequest);
-        }
-    }
-
-    public function registerActionOld(Request $request)
-    {
-        $this->parseJsonRequest($request);
-        $clientManager = $this->getClientManager();
-
-        $form = $this->createForm(ClientMetadataForm::class, new ClientMetadata(), ['constraints' => new Valid()]);
-
-        $data = json_decode($request->getContent(), true);
-        $form->submit($data);
-        if ($form->isValid()) {
-            $metadata = $form->getData();
             try {
                 $client = $clientManager->register($metadata);
             } catch (UniqueConstraintViolationException $e) {
@@ -71,9 +62,7 @@ class ClientRegistrationController extends FOSRestController
 
             return $this->view($metadata->fromClient($client), 201);
         } else {
-            /** @var FormError[] $errors */
-            $errors = $form->getErrors(true);
-            $error = $this->handleFormErrors($errors);
+            $error = $this->handleViolations($violations);
 
             return $this->view($error->getData(), 400);
         }
@@ -96,49 +85,6 @@ class ClientRegistrationController extends FOSRestController
         $view = $this->view($client->getMetadata())->setContext($context);
 
         return $this->handleView($view);
-    }
-
-    /**
-     * @param \Symfony\Component\Form\FormError[] $errors
-     * @return DynamicRegistrationException
-     */
-    private function handleFormErrors($errors)
-    {
-        foreach ($errors as $error) {
-            $cause = $error->getCause();
-            $value = $cause->getInvalidValue();
-            $propertyRegex = '/^(?:data\.|children\[)([a-zA-Z0-9_]+)\]?.*$/';
-            $property = preg_replace($propertyRegex, '$1', $cause->getPropertyPath());
-
-            switch ($property) {
-                case 'redirect_uris':
-                    return new DynamicRegistrationException(
-                        'Invalid redirect URIs: '.$cause->getMessage(),
-                        DynamicRegistrationException::ERROR_INVALID_REDIRECT_URI
-                    );
-                case 'sector_identifier_uri':
-                    return new DynamicRegistrationException(
-                        "Invalid value for '{$property}': {$cause->getMessage()}",
-                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA
-                    );
-                default:
-                    return new DynamicRegistrationException(
-                        "Invalid value for '{$property}'='{$value}': {$cause->getMessage()}",
-                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA
-                    );
-            }
-        }
-
-        throw new \RuntimeException('No errors found but there should be at least one!');
-    }
-
-    private function parseJsonRequest(Request $request)
-    {
-        $request->setFormat('json', 'application/json');
-        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
-            $data = json_decode($request->getContent(), true);
-            $request->request->replace(is_array($data) ? $data : []);
-        }
     }
 
     /**
@@ -174,5 +120,37 @@ class ClientRegistrationController extends FOSRestController
     private function getClientManager()
     {
         return $this->get('lc.client_manager');
+    }
+
+    /**
+     * @param ConstraintViolationInterface[]|ConstraintViolationListInterface $violations
+     * @return DynamicRegistrationException
+     */
+    private function handleViolations($violations)
+    {
+        foreach ($violations as $violation) {
+            $property = $violation->getPropertyPath();
+            $value = $violation->getInvalidValue();
+
+            switch ($property) {
+                case 'redirect_uris':
+                    return new DynamicRegistrationException(
+                        'Invalid redirect URIs: '.$violation->getMessage(),
+                        DynamicRegistrationException::ERROR_INVALID_REDIRECT_URI
+                    );
+                case 'sector_identifier_uri':
+                    return new DynamicRegistrationException(
+                        "Invalid value for '{$property}': {$violation->getMessage()}",
+                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA
+                    );
+                default:
+                    return new DynamicRegistrationException(
+                        "Invalid value for '{$property}'='{$value}': {$violation->getMessage()}",
+                        DynamicRegistrationException::ERROR_INVALID_CLIENT_METADATA
+                    );
+            }
+        }
+
+        throw new \RuntimeException('No errors found but there should be at least one!');
     }
 }

@@ -18,7 +18,6 @@ use LoginCidadao\CoreBundle\Event\LoginCidadaoCoreEvents;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\OAuthBundle\Model\ClientInterface;
 use LoginCidadao\OpenIDBundle\Entity\ClientMetadata;
-use LoginCidadao\OpenIDBundle\Model\CreateClientRequest;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ClientManager
@@ -170,49 +169,5 @@ class ClientManager
             $registrationAccessToken = bin2hex(random_bytes(120));
             $data->setRegistrationAccessToken($registrationAccessToken);
         }
-    }
-
-    public function createClientMetadata(CreateClientRequest $createClientRequest): ClientMetadata
-    {
-        $metadata = (new ClientMetadata())
-            ->setRedirectUris($createClientRequest->redirect_uris)
-            ->setResponseTypes($createClientRequest->response_types)
-            ->setGrantTypes($createClientRequest->grant_types)
-            ->setApplicationType($createClientRequest->application_type)
-            ->setContacts($createClientRequest->contacts)
-            ->setClientName($createClientRequest->client_name)
-            ->setLogoUri($createClientRequest->logo_uri)
-            ->setClientUri($createClientRequest->client_uri)
-            ->setPolicyUri($createClientRequest->policy_uri)
-            ->setTosUri($createClientRequest->tos_uri)
-            ->setJwksUri($createClientRequest->jwks_uri)
-            ->setJwks($createClientRequest->jwks)
-            ->setSectorIdentifierUri($createClientRequest->sector_identifier_uri)
-            ->setSubjectType($createClientRequest->subject_type)
-            ->setIdTokenSignedResponseAlg($createClientRequest->id_token_signed_response_alg)
-            ->setIdTokenEncryptedResponseAlg($createClientRequest->id_token_encrypted_response_alg)
-            ->setIdTokenEncryptedResponseEnc($createClientRequest->id_token_encrypted_response_enc)
-            ->setUserinfoSignedResponseAlg($createClientRequest->userinfo_signed_response_alg)
-            ->setUserinfoEncryptedResponseAlg($createClientRequest->userinfo_encrypted_response_alg)
-            ->setUserinfoEncryptedResponseEnc($createClientRequest->userinfo_encrypted_response_enc)
-            ->setRequestObjectSigningAlg($createClientRequest->request_object_signing_alg)
-            ->setRequestObjectEncryptionAlg($createClientRequest->request_object_encryption_alg)
-            ->setRequestObjectEncryptionEnc($createClientRequest->request_object_encryption_enc)
-            ->setTokenEndpointAuthMethod($createClientRequest->token_endpoint_auth_method)
-            ->setTokenEndpointAuthSigningAlg($createClientRequest->token_endpoint_auth_signing_alg)
-            ->setDefaultMaxAge($createClientRequest->default_max_age)
-            ->setRequireAuthTime($createClientRequest->require_auth_time)
-            ->setDefaultAcrValues($createClientRequest->default_acr_values)
-            ->setInitiateLoginUri($createClientRequest->initiate_login_uri)
-            ->setRequestUris($createClientRequest->request_uris)
-            ->setRegistrationAccessToken($createClientRequest->registration_access_token)
-            ->setPostLogoutRedirectUris($createClientRequest->post_logout_redirect_uris);
-
-        $metadata = $this->populateNewMetadata($metadata);
-
-        $this->em->persist($metadata);
-        $this->em->flush();
-
-        return $metadata;
     }
 }
