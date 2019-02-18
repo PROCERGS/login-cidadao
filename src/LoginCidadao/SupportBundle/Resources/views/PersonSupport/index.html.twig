@@ -1,0 +1,32 @@
+{% extends "LoginCidadaoSupportBundle::base.html.twig" %}
+{% block content %}
+    <div class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'support.search.title' | trans }}</h2>
+            </div>
+            <div class="panel-body">
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        {{ form_start(form) }}
+                        {{ form_errors(form) }}
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ form_row(form.supportTicket) }}
+                                {{ form_row(form.smartSearch) }}
+                                <button type="submit" class="btn btn-success pull-right">
+                                    {{ 'support.search.submit' | trans }}
+                                </button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if grid %}
+        {{ include("LoginCidadaoSupportBundle:PersonSupport:grid.html.twig") }}
+    {% endif %}
+{% endblock %}

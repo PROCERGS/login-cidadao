@@ -33,6 +33,9 @@ class PhoneVerificationOptions
     /** @var string */
     private $verificationTokenLength;
 
+    /** @var int */
+    private $enforceVerificationThreshold;
+
     /**
      * PhoneVerificationOptions constructor.
      * @param int $length
@@ -42,6 +45,7 @@ class PhoneVerificationOptions
      * @param bool $useUpperCase
      * @param $smsResendTimeout
      * @param $verificationTokenLength
+     * @param int $enforceVerificationThreshold
      */
     public function __construct(
         $length,
@@ -50,7 +54,8 @@ class PhoneVerificationOptions
         $useLowerCase,
         $useUpperCase,
         $smsResendTimeout,
-        $verificationTokenLength
+        $verificationTokenLength,
+        int $enforceVerificationThreshold
     ) {
         $this->length = $length;
         $this->useNumbers = $useNumbers;
@@ -59,6 +64,7 @@ class PhoneVerificationOptions
         $this->useUpperCase = $useUpperCase;
         $this->smsResendTimeout = $smsResendTimeout;
         $this->verificationTokenLength = $verificationTokenLength;
+        $this->enforceVerificationThreshold = $enforceVerificationThreshold;
     }
 
     /**
@@ -112,5 +118,10 @@ class PhoneVerificationOptions
     public function getVerificationTokenLength()
     {
         return $this->verificationTokenLength;
+    }
+
+    public function getEnforceVerificationThreshold(): int
+    {
+        return $this->enforceVerificationThreshold;
     }
 }

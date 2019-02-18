@@ -1,0 +1,34 @@
+{% extends "LoginCidadaoCoreBundle:Admin:base.html.twig" %}
+
+{% block content %}
+    {% if blockedPhone.phoneNumber.countryCode == 55 %}
+        {% set format = 'NATIONAL' %}
+    {% else %}
+        {% set format = 'INTERNATIONAL' %}
+    {% endif %}
+    {% set formattedPhone = blockedPhone.phoneNumber | phone_number_format(format) %}
+    <div id="suggestion_id" class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'admin.blocklist.details.title' | trans({"%phone%": formattedPhone }) }}</h2>
+            </div>
+            <div class="panel-body">
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        <dl>
+                            <dt>{{ 'admin.blocklist.details.blocked_by' | trans }}</dt>
+                            <dd>{{ blockedPhone.blockedBy.fullName }}</dd>
+
+                            <dt>{{ 'admin.blocklist.details.date_blocked' | trans }}</dt>
+                            <dd>{{ blockedPhone.createdAt | date('admin.blocklist.details.date_blocked_format' | trans) }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if grid %}
+            {{ include("LoginCidadaoPhoneVerificationBundle:AdminBlocklist:blockedUsers.grid.html.twig") }}
+        {% endif %}
+    </div>
+{% endblock %}

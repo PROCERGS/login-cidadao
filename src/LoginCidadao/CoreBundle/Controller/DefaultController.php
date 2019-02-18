@@ -11,6 +11,7 @@
 namespace LoginCidadao\CoreBundle\Controller;
 
 use LoginCidadao\APIBundle\Entity\ActionLogRepository;
+use LoginCidadao\BadgesControlBundle\Handler\BadgesHandler;
 use LoginCidadao\CoreBundle\Form\Type\ContactFormType;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\CoreBundle\Model\SupportMessage;
@@ -44,16 +45,20 @@ class DefaultController extends Controller
      */
     public function contactAction(Request $request, $correlationId = null)
     {
+        /** @var TranslatorInterface $translator */
+        $translator = $this->get('translator');
+
         $person = $this->getUser() instanceof PersonInterface ? $this->getUser() : null;
 
         $data = new SupportMessage($person);
         $data->setExtra('Correlation Id', $correlationId);
 
-        $form = $this->createForm(ContactFormType::class, $data, ['loggedIn' => $person instanceof PersonInterface]);
+        $form = $this->createForm(ContactFormType::class, $data, [
+            'loggedIn' => $person instanceof PersonInterface,
+            'recaptchaError' => $translator->trans('contact.form.captcha.error'),
+        ]);
         $form->handleRequest($request);
 
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
         $message = $translator->trans('contact.form.sent');
 
         if ($form->isValid()) {
@@ -79,6 +84,7 @@ class DefaultController extends Controller
     public function dashboardAction()
     {
         // badges
+        /** @var BadgesHandler $badgesHandler */
         $badgesHandler = $this->get('badges.handler');
         $badges = $badgesHandler->getAvailableBadges();
         $userBadges = $badgesHandler->evaluate($this->getUser())->getBadges();
@@ -86,19 +92,20 @@ class DefaultController extends Controller
         // logs
         $em = $this->getDoctrine()->getManager();
 
+        $showProfileViews = $this->isGranted('FEATURE_SHOW_PROFILE_VIEWS');
         /** @var ActionLogRepository $logRepo */
         $logRepo = $em->getRepository('LoginCidadaoAPIBundle:ActionLog');
         $logs['logins'] = $logRepo->findLoginsByPerson($this->getUser(), 5);
-        $logs['activity'] = $logRepo->getActivityLogsByTarget($this->getUser(), 4);
+        $logs['activity'] = $logRepo->getActivityLogsByTarget($this->getUser(), 4, $showProfileViews);
 
         $defaultClientUid = $this->container->getParameter('oauth_default_client.uid');
 
-        return array(
+        return [
             'allBadges' => $badges,
             'userBadges' => $userBadges,
             'logs' => $logs,
             'defaultClientUid' => $defaultClientUid,
-        );
+        ];
     }
 
     /**
@@ -164,9 +171,10 @@ class DefaultController extends Controller
     {
         $message = $supportMessage->getFormattedMessage($translator);
 
-        $email = (new SentEmail())
+        $email = new SentEmail();
+        $email
             ->setType('contact-mail')
-            ->setSubject('Fale conosco - '.$supportMessage->getName())
+            ->setSubject('Fale conosco - '.$supportMessage->getName()." - Ticket: {$email->getSupportTicket()}")
             ->setSender($supportMessage->getEmail())
             ->setReceiver($this->container->getParameter('contact_form.email'))
             ->setMessage($message);

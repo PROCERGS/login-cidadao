@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the login-cidadao project or it's bundles.
+ *
+ * (c) Guilherme Donato <guilhermednt on github>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace LoginCidadao\CoreBundle\Controller\Admin;
 
@@ -6,6 +14,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use libphonenumber\PhoneNumber;
 use LoginCidadao\APIBundle\Security\Audit\ActionLogger;
 use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType;
 use LoginCidadao\CoreBundle\Form\Type\PersonResumeFormType;
 use LoginCidadao\CoreBundle\Security\User\Manager\UserManager;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
@@ -39,7 +48,7 @@ class PersonController extends Controller
         if ($request->get('search') !== null) {
             $data = ['username' => $request->get('search')];
         }
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType', $data);
+        $form = $this->createForm(PersonFilterFormType::class, $data);
         $form = $form->createView();
 
         return compact('form');
@@ -114,7 +123,7 @@ class PersonController extends Controller
      */
     public function gridAction(Request $request)
     {
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\PersonFilterFormType');
+        $form = $this->createForm(PersonFilterFormType::class);
         $form->handleRequest($request);
         $gridView = null;
         if ($form->isValid()) {

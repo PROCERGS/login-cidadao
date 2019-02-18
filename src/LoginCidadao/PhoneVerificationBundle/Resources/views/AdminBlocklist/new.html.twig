@@ -1,0 +1,41 @@
+{% extends "LoginCidadaoCoreBundle:Admin:base.html.twig" %}
+{% block content %}
+    <div id="suggestion_id" class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">{{ 'admin.blocklist.new.title'|trans }}</h2>
+            </div>
+            <div class="panel-body">
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        {{ form(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/moment/min/moment-with-locales.min.js') }}"></script>
+    {% javascripts
+        '@intl_tel_input_js'
+        '@LoginCidadaoCoreBundle/Resources/public/js/components/intl-tel-input.js'
+        filter='uglifyjs2' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        {% javascripts '@intl_tel_input_utils_js' filter='uglifyjs2' %}
+        var intlTelInputUtilsScriptUrl = '{{ asset_url }}';
+        var intlTelInputPreferredCountries = {{ intl_tel_input_preferred_countries | json_encode | raw }};
+        {% endjavascripts %}
+    </script>
+{% endblock %}
+
+{% block stylesheets_custom %}
+    {% stylesheets '@lc_logged_css' '@intl_tel_input_css' filter='cssrewrite' filter='?uglifycss' %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}

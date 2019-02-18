@@ -31,3 +31,46 @@ tasks:
             errors:
                 too_many_requests: Ainda não é possível reenviar o código de verificação. Aguarde alguns minutos e tente novamente.
                 unavailable: O serviço de SMS está indisponível no momento. Por favor, aguarde alguns minutos e tente novamente.
+
+        edit:
+            show_form: Clique aqui para alterar seu telefone
+            submit: Alterar Telefone
+
+admin:
+    blocklist:
+        menu_item: Bloqueio de Telefones
+        list:
+            title: Busca de Telefones Banidos Manualmente
+            new: Banir um Telefone
+            form:
+                phone:
+                    label: Telefone a ser pesquisado
+                    placeholder: Digite o telefone que deseja pesquisar
+                submit.label: Pesquisar
+            table:
+                header:
+                    phone_number: Telefone
+                    blocked_by: Banido por
+                    date_blocked: Banido em
+                load_more: Carregar mais
+                details: Detalhes
+                date_blocked_format: d/m/Y H:i:s
+        new:
+            title: Banir usuários por telefone
+            form:
+                phone:
+                    label: Telefone que será banido
+                    placeholder: Digite o telefone a ser banido
+                submit.label: Banir Telefone
+        details:
+            title: "Detalhes de Telefone Banido: %phone%"
+            blocked_by: Banido por:
+            date_blocked: Banido em:
+            date_blocked_format: d/m/Y H:i:s
+            users_table:
+                header:
+                    full_name: Nome Completo
+                    cpf: CPF
+                    email: Email
+                user_details: Detalhes
+                load_more: Carregar mais

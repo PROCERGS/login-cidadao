@@ -10,6 +10,7 @@
 
 namespace LoginCidadao\APIBundle\Security\Audit;
 
+use LoginCidadao\CoreBundle\Model\IdentifiablePersonInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -188,14 +189,14 @@ class ActionLogger
 
     /**
      * @param Request $request
-     * @param PersonInterface $person
-     * @param PersonInterface $viewer
+     * @param IdentifiablePersonInterface $person
+     * @param IdentifiablePersonInterface $viewer
      * @param array $controllerAction
      */
     public function registerProfileView(
         Request $request,
-        PersonInterface $person,
-        PersonInterface $viewer,
+        IdentifiablePersonInterface $person,
+        IdentifiablePersonInterface $viewer,
         array $controllerAction
     ) {
         $auditUsername = $this->auditConfig->getCurrentUsername();
@@ -206,8 +207,8 @@ class ActionLogger
 
     private function registerActionLog(
         Request $request,
-        PersonInterface $person,
-        PersonInterface $actor,
+        IdentifiablePersonInterface $person,
+        IdentifiablePersonInterface $actor,
         array $controllerAction,
         $auditUsername,
         $actionType

@@ -10,13 +10,23 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Controller;
 
+use FOS\UserBundle\Event\FilterUserResponseEvent;
+use FOS\UserBundle\Event\FormEvent;
+use FOS\UserBundle\Event\GetResponseUserEvent;
+use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Model\UserManagerInterface;
+use LoginCidadao\CoreBundle\Model\PersonInterface;
+use LoginCidadao\CoreBundle\Security\User\Manager\UserManager;
 use LoginCidadao\PhoneVerificationBundle\Exception\VerificationNotSentException;
+use LoginCidadao\PhoneVerificationBundle\Form\PhoneNumberFormType;
+use LoginCidadao\PhoneVerificationBundle\Form\PhoneVerificationType;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationServiceInterface;
 use LoginCidadao\TaskStackBundle\Service\TaskStackManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -43,7 +53,10 @@ class VerificationController extends Controller
             return $this->noVerificationOrVerified($request);
         }
 
-        $form = $this->createForm('LoginCidadao\PhoneVerificationBundle\Form\PhoneVerificationType');
+        $editPhoneForm = $this->createForm(PhoneNumberFormType::class, $verification->getPerson(), [
+            'action' => $this->generateUrl('lc_phone_verification_edit_phone', ['verificationId' => $id]),
+        ]);
+        $form = $this->createForm(PhoneVerificationType::class);
         $form->handleRequest($request);
         $verified = false;
 
@@ -62,8 +75,15 @@ class VerificationController extends Controller
         }
 
         $nextResend = $this->getNextResendDate($verification);
+        $mandatory = $phoneVerificationService->isVerificationMandatory($verification);
 
-        return ['verification' => $verification, 'nextResend' => $nextResend, 'form' => $form->createView()];
+        return [
+            'verification' => $verification,
+            'nextResend' => $nextResend,
+            'mandatory' => $mandatory,
+            'form' => $form->createView(),
+            'editPhoneForm' => $editPhoneForm->createView(),
+        ];
     }
 
     /**
@@ -110,6 +130,41 @@ class VerificationController extends Controller
         $this->addFlash($result['type'], $translator->trans($result['message']));
 
         return $this->redirectToRoute('lc_verify_phone', ['id' => $id]);
+    }
+
+    /**
+     * @Route("/task/verify-phone/{verificationId}/edit-phone", name="lc_phone_verification_edit_phone")
+     */
+    public function editPhoneAction(Request $request, $verificationId)
+    {
+        /** @var PersonInterface $person */
+        $person = $this->getUser();
+        $response = $this->redirectToRoute('lc_verify_phone', ['id' => $verificationId]);
+
+        /** @var EventDispatcherInterface $dispatcher */
+        $dispatcher = $this->get('event_dispatcher');
+        $event = new GetResponseUserEvent($person, $request);
+        $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
+
+        $editPhoneForm = $this->createForm(PhoneNumberFormType::class, $person, [
+            'action' => $this->generateUrl('lc_phone_verification_edit_phone', ['verificationId' => $verificationId]),
+        ]);
+        $editPhoneForm->handleRequest($request);
+        if ($editPhoneForm->isValid()) {
+            /** @var $userManager UserManager */
+            $userManager = $this->get('lc.user_manager');
+
+            $event = new FormEvent($editPhoneForm, $request);
+            $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
+
+            $userManager->updateUser($person);
+
+            $event = new FilterUserResponseEvent($person, $request, $response);
+            $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED, $event);
+            $response = $event->getResponse();
+        }
+
+        return $response;
     }
 
     /**

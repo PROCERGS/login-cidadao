@@ -8,6 +8,7 @@ use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Util\TokenGenerator;
 use FOS\UserBundle\Event\GetResponseUserEvent;
 use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Form\Type\EmailFormType;
 use LoginCidadao\CoreBundle\Model\ConfirmEmailTask;
 use LoginCidadao\CoreBundle\Model\PersonInterface;
 use LoginCidadao\TaskStackBundle\Model\RouteTaskTarget;
@@ -57,7 +58,7 @@ class TaskController extends Controller
         $event = new GetResponseUserEvent($person, $request);
         $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
 
-        $form = $this->createForm('LoginCidadao\CoreBundle\Form\Type\EmailFormType', $person);
+        $form = $this->createForm(EmailFormType::class, $person);
 
         $response = null;
         $form->handleRequest($request);

@@ -135,4 +135,18 @@ interface PhoneVerificationServiceInterface
      * @return bool
      */
     public function verifyToken(PhoneVerificationInterface $phoneVerification, $providedToken);
+
+    /**
+     * Checks if the user MUST verify their phone
+     *
+     * @param PhoneVerificationInterface $phoneVerification
+     * @return bool
+     */
+    public function isVerificationMandatory(PhoneVerificationInterface $phoneVerification): bool;
+
+    /**
+     * @param PhoneNumber $phoneNumber
+     * @return int how many users have this PhoneNumber verified
+     */
+    public function countVerified(PhoneNumber $phoneNumber): int;
 }
