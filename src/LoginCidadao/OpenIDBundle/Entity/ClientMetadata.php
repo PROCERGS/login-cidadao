@@ -52,6 +52,7 @@ class ClientMetadata
      *
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
+     * @Assert\Type("array")
      * @Assert\All({
      *      @Assert\Type(type="string"),
      *      @Assert\NotBlank,
@@ -66,6 +67,7 @@ class ClientMetadata
      *
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
+     * @Assert\Type("array")
      * @Assert\All({
      *      @Assert\Type("string")
      * })
@@ -78,6 +80,7 @@ class ClientMetadata
      *
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
+     * @Assert\Type("array")
      * @Assert\All({
      *      @Assert\Type("string")
      * })
@@ -96,6 +99,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
+     * @Assert\Type("array")
      * @Assert\All({
      *      @Assert\Type("string")
      * })
@@ -304,6 +308,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
+     * @Assert\Type("array")
      * @Assert\All({
      *      @Assert\Type("string"),
      *      @Assert\Url(checkDNS = false)
@@ -330,6 +335,7 @@ class ClientMetadata
     /**
      * @JMS\Expose
      * @JMS\Groups({"client_metadata"})
+     * @Assert\Type("array")
      * @Assert\All({
      *      @Assert\Type("string"),
      *      @Assert\Url(checkDNS = false)
@@ -837,7 +843,7 @@ class ClientMetadata
             $client->setName($clientName);
         }
 
-        if (count($redirectUris) > 0) {
+        if (is_array($redirectUris) && count($redirectUris) > 0) {
             $client->setRedirectUris($redirectUris);
         }
 
