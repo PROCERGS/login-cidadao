@@ -11,6 +11,10 @@
 namespace LoginCidadao\PhoneVerificationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use libphonenumber\PhoneNumber;
+use LoginCidadao\CoreBundle\Entity\Person;
+use Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType;
 
 /**
  * PhoneVerificationRepository
@@ -24,10 +28,31 @@ class PhoneVerificationRepository extends EntityRepository
 {
     public function countBadges()
     {
-        return $this->createQueryBuilder('ph')
-            ->select('COUNT(p)')
-            ->innerJoin('LoginCidadaoCoreBundle:Person', 'p', 'WITH', 'ph.person = p')
-            ->andWhere('ph.verifiedAt IS NOT NULL')
-            ->getQuery()->getSingleScalarResult();
+        try {
+            return $this->createQueryBuilder('ph')
+                ->select('COUNT(p)')
+                ->innerJoin(Person::class, 'p', 'WITH', 'ph.person = p')
+                ->andWhere('ph.verifiedAt IS NOT NULL')
+                ->getQuery()->getSingleScalarResult();
+        } catch (NonUniqueResultException $e) {
+            throw new \RuntimeException('Could not count how many people has a verified phone number', 0, $e);
+        }
+    }
+
+    public function countVerified(PhoneNumber $phoneNumber)
+    {
+        try {
+            return $this->createQueryBuilder('v')
+                ->select('COUNT(p)')
+                ->innerJoin(Person::class, 'p', 'WITH', 'v.person = p')
+                ->where('v.phone = :phone')
+                ->andWhere('v.phone = p.mobile')
+                ->andWhere('v.verifiedAt IS NOT NULL')
+                ->setParameter('phone', $phoneNumber, PhoneNumberType::NAME)
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (NonUniqueResultException $e) {
+            throw new \RuntimeException('Could not count how many people uses the same verified phone number', 0, $e);
+        }
     }
 }

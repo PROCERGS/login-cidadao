@@ -10,8 +10,10 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Form;
 
+use LoginCidadao\CoreBundle\Form\Type\TelType;
 use LoginCidadao\PhoneVerificationBundle\Service\PhoneVerificationOptions;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class PhoneVerificationType extends AbstractType
@@ -34,20 +36,14 @@ class PhoneVerificationType extends AbstractType
             || $this->phoneVerificationOptions->isUseLowerCase();
 
         if ($useLetters) {
-            $type = 'Symfony\Component\Form\Extension\Core\Type\TextType';
+            $type = TextType::class;
         } else {
-            $type = 'LoginCidadao\CoreBundle\Form\Type\TelType';
+            $type = TelType::class;
         }
 
-        $builder->add(
-            'verificationCode',
-            $type,
-            [
-                'label' => 'tasks.verify_phone.form.verificationCode.label',
-                'attr' => [
-                    'placeholder' => 'tasks.verify_phone.form.verificationCode.placeholder',
-                ],
-            ]
-        );
+        $builder->add('verificationCode', $type, [
+            'label' => 'tasks.verify_phone.form.verificationCode.label',
+            'attr' => ['placeholder' => 'tasks.verify_phone.form.verificationCode.placeholder'],
+        ]);
     }
 }

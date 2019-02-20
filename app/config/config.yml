@@ -6,6 +6,7 @@ imports:
     - { resource: logstash.yml }
     - { resource: "@LoginCidadaoTOSBundle/Resources/config/config.yml" }
     - { resource: 'workflows/*.{yml,yaml}' }
+    - { resource: "@LoginCidadaoSupportBundle/Resources/config/services.yml" }
 
 framework:
     #esi:             ~
@@ -296,6 +297,7 @@ simple_things_entity_audit:
 
         - LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification
         - LoginCidadao\PhoneVerificationBundle\Entity\SentVerification
+        - LoginCidadao\PhoneVerificationBundle\Entity\BlockedPhoneNumber
 
         - PROCERGS\LoginCidadao\CoreBunde\Entity\PersonMeuRS
         - PROCERGS\LoginCidadao\NfgBunde\Entity\NfgProfile

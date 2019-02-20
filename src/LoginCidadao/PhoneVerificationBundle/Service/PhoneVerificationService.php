@@ -10,8 +10,11 @@
 
 namespace LoginCidadao\PhoneVerificationBundle\Service;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use libphonenumber\PhoneNumber;
+use LoginCidadao\CoreBundle\Entity\Person;
+use LoginCidadao\CoreBundle\Entity\PersonRepository;
+use LoginCidadao\PhoneVerificationBundle\Entity\SentVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\SentVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Event\PhoneVerificationEvent;
 use LoginCidadao\PhoneVerificationBundle\Event\SendPhoneVerificationEvent;
@@ -24,14 +27,13 @@ use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerification;
 use LoginCidadao\PhoneVerificationBundle\Entity\PhoneVerificationRepository;
 use LoginCidadao\PhoneVerificationBundle\Model\PhoneVerificationInterface;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class PhoneVerificationService implements PhoneVerificationServiceInterface
 {
     /** @var PhoneVerificationOptions */
     private $options;
 
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     private $em;
 
     /** @var PhoneVerificationRepository */
@@ -40,27 +42,29 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
     /** @var SentVerificationRepository */
     private $sentVerificationRepository;
 
+    /** @var PersonRepository */
+    private $personRepository;
+
     /** @var EventDispatcherInterface */
     private $dispatcher;
 
     /**
      * PhoneVerificationService constructor.
      * @param PhoneVerificationOptions $options
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         PhoneVerificationOptions $options,
-        EntityManager $em,
+        EntityManagerInterface $em,
         EventDispatcherInterface $dispatcher
     ) {
         $this->options = $options;
         $this->em = $em;
         $this->dispatcher = $dispatcher;
-        $this->phoneVerificationRepository = $this->em
-            ->getRepository('LoginCidadaoPhoneVerificationBundle:PhoneVerification');
-        $this->sentVerificationRepository = $this->em
-            ->getRepository('LoginCidadaoPhoneVerificationBundle:SentVerification');
+        $this->phoneVerificationRepository = $this->em->getRepository(PhoneVerification::class);
+        $this->sentVerificationRepository = $this->em->getRepository(SentVerification::class);
+        $this->personRepository = $this->em->getRepository(Person::class);
     }
 
     /**
@@ -297,6 +301,10 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         return $sentVerification;
     }
 
+    /**
+     * @param SentVerificationInterface $sentVerification
+     * @return \LoginCidadao\PhoneVerificationBundle\Entity\SentVerification|SentVerificationInterface
+     */
     public function registerVerificationSent(SentVerificationInterface $sentVerification)
     {
         $this->em->persist($sentVerification);
@@ -322,6 +330,11 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         return $lastSentVerification->getSentAt()->add($timeout);
     }
 
+    /**
+     * @param PhoneVerificationInterface $phoneVerification
+     * @param string $token
+     * @return bool
+     */
     public function verifyToken(PhoneVerificationInterface $phoneVerification, $token)
     {
         if ($phoneVerification->isVerified()) {
@@ -333,5 +346,23 @@ class PhoneVerificationService implements PhoneVerificationServiceInterface
         }
 
         return $this->verify($phoneVerification, $phoneVerification->getVerificationCode());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isVerificationMandatory(PhoneVerificationInterface $phoneVerification): bool
+    {
+        $accountsCount = $this->personRepository->countByPhone($phoneVerification->getPhone());
+
+        return $accountsCount >= $this->options->getEnforceVerificationThreshold();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function countVerified(PhoneNumber $phoneNumber): int
+    {
+        return $this->phoneVerificationRepository->countVerified($phoneNumber);
     }
 }

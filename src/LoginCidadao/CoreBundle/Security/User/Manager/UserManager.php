@@ -18,6 +18,9 @@ use LoginCidadao\ValidationBundle\Validator\Constraints\UsernameValidator;
 
 class UserManager extends BaseManager
 {
+    const FLUSH_STRATEGY_ONCE = 'once';
+    const FLUSH_STRATEGY_EACH = 'each';
+
     public function createUser()
     {
         return parent::createUser();
@@ -122,8 +125,8 @@ class UserManager extends BaseManager
 
     public function blockUsersByPhone(PhoneNumber $phone, $flushStrategy = null)
     {
-        $andFlush = $flushStrategy === 'each' ? true : false;
-        $once = $flushStrategy === 'once' ? true : false;
+        $andFlush = $flushStrategy === self::FLUSH_STRATEGY_EACH ? true : false;
+        $once = $flushStrategy === self::FLUSH_STRATEGY_ONCE ? true : false;
 
         /** @var PersonInterface[] $users */
         $users = parent::getRepository()->findBy(['mobile' => $phone]);
@@ -134,7 +137,6 @@ class UserManager extends BaseManager
             if ($user instanceof PersonInterface) {
                 $blockedUsers[] = $user;
             }
-            // TODO: add yield when we upgrade to PHP 7.0
         }
         if ($once) {
             $this->objectManager->flush();

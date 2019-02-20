@@ -1,0 +1,30 @@
+{% extends "LoginCidadaoCoreBundle:Admin:base.html.twig" %}
+{% block content %}
+    <div id="suggestion_id" class="content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="panel-title">{{ 'admin.blocklist.list.title'|trans }}</h2>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ path('phone_blocklist_new') }}" class="btn btn-xs btn-primary pull-right">
+                            {{ 'admin.blocklist.list.new' | trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        {{ form(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if grid %}
+            {{ include("LoginCidadaoPhoneVerificationBundle:AdminBlocklist:grid.html.twig") }}
+        {% endif %}
+    </div>
+{% endblock %}

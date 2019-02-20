@@ -20,6 +20,7 @@ class ConfigurationTest extends TestCase
     {
         return [
             'enabled' => false,
+            'require_validation_threshold' => 3,
             'verification_code' => [
                 'length' => 6,
                 'use_numbers' => true,
@@ -32,6 +33,10 @@ class ConfigurationTest extends TestCase
             ],
             'sms' => [
                 'resend_timeout' => '+5 minutes',
+            ],
+            'blocklist' => [
+                'enable_auto_block' => true,
+                'auto_block_limit' => 10,
             ],
         ];
     }

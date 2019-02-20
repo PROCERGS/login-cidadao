@@ -46,7 +46,17 @@
     <div class="col-md-2">
         <dt>{{ 'cpf'|trans }}</dt>
         <dd>
-            <div style="word-wrap: break-word;">{{ row.cpf }}</div>
+            <div style="word-wrap: break-word;">
+                {% if row.cpf is not null %}
+                    {% if is_granted('ROLE_VIEW_USERS_CPF') %}
+                        {{ row.cpf }}
+                    {% else %}
+                        {{ 'lc.admin.person.metadata.hasCpf.yes' | trans }}
+                    {% endif %}
+                {% else %}
+                    {{ 'lc.admin.person.metadata.hasCpf.no' | trans }}
+                {% endif %}
+            </div>
         </dd>
     </div>
     <div class="col-md-2">
